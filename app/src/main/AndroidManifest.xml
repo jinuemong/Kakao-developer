@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
+    <!-- api 사용을 위한 인터넷 연결 -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- GPS와 네트워크를 사용하여 사용자의 정확한 위치 정보를 가져옴 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" /> <!-- 네트워크만 사용하여 사용자의 대략적인 위치 정보를 가져옴 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".GlobalApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -12,13 +17,36 @@
         android:theme="@style/Theme.KakaoDeveloper"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- for kakao -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+
+                <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+                <!-- Redirect URI : "kakao${NATIVE_APP_KEY}://oauth" -->
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="oauth"
+                    android:scheme="kakao0e76ab2e79ca08872fbcdab67c475fae" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:exported="false">
         </activity>
     </application>
 
