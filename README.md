@@ -1,2 +1,2 @@
 # Kakao-developer
-Develop using Kakao Developer Documentation
+Development using Kakao developer documentation: service testing such as api, android, login, communication, etc.
