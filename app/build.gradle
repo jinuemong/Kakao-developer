@@ -22,6 +22,10 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            buildConfigField("String","APP_KEY",'"0e76ab2e79ca08872fbcdab67c475fae"')
+        }
+        debug{
+            buildConfigField("String","APP_KEY",'"0e76ab2e79ca08872fbcdab67c475fae"')
         }
     }
     // 자바 버전 설정
@@ -64,4 +68,7 @@ dependencies {
     implementation "com.kakao.sdk:v2-share:2.13.0" // 메시지(카카오톡 공유)
     implementation "com.kakao.sdk:v2-navi:2.13.0" // 카카오내비
     implementation "com.kakao.sdk:v2-friend:2.13.0" // 카카오톡 소셜 피커, 리소스 번들 파일 포함
+
+    // 카카오 맵
+    implementation files('libs/libDaumMapAndroid.jar')
 }

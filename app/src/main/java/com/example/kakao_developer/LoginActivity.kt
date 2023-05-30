@@ -1,5 +1,6 @@
 package com.example.kakao_developer
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -17,11 +18,12 @@ class LoginActivity : AppCompatActivity() {
 
     // 카카오 계정으로 로그인 callback
     // 카카오톡으로 로그인 할 수 없는 경우 -> 앱이 없음 -> 카카오 계정으로 로그인
-    val callback : (OAuthToken?,Throwable?) -> Unit  = { token,error->
+    private val callback : (OAuthToken?,Throwable?) -> Unit  = { token,error->
         if (error != null){
             Log.d("카카오 계정 로그인 실패 ",error.toString())
         } else if (token != null){
             Log.d("카카오 계정 로그인 성공 ",token.accessToken)
+            getUserInfo()
         }
     }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,7 @@ class LoginActivity : AppCompatActivity() {
                 } else if (token != null){
                     Log.d("카카오톡 앱 로그인 성공 ",token.accessToken)
                     getUserInfo()
+
                 }
             }
         } else {
@@ -81,7 +84,6 @@ class LoginActivity : AppCompatActivity() {
                 } else {
                     // 토큰 유효성 체크 성공  ( 필요 시 토큰 재 갱신)
                     check = true
-                    getUserInfo()
                 }
             }
         } else {
@@ -91,21 +93,26 @@ class LoginActivity : AppCompatActivity() {
         return check
     }
 
-    private fun getUserInfo() : String{
-        var userInfo = "None"
+    private fun getUserInfo(){
         UserApiClient.instance.accessTokenInfo{ tokenInfo, error ->
             if (error != null){
                 Log.d("토큰 정보 불러오기 실패",error.toString())
             }
             else if (tokenInfo != null){
-                userInfo = "회원 아이디 : ${tokenInfo.id} \n" +
-                        "만료시간: ${tokenInfo.expiresIn}"
-                Log.d("토큰 정보 입니다 : ", userInfo)
+                val userId = tokenInfo.id?.toInt()
+                val expiresIn = tokenInfo.expiresIn.toInt()
+                Log.d("토큰 정보 입니다 : ",
+                    "회원 아이디 : $userId \n" +
+                        "만료시간: $expiresIn")
+
+                val intent =  Intent(applicationContext,MainActivity::class.java)
+                intent.putExtra("tokenInfo_id",userId)
+                intent.putExtra("tokenInfo_expiresIn",expiresIn)
+                startActivity(intent)
             }
             else {
                 Log.d("토큰 정보 불러오기 실패", "기타 오류")
             }
         }
-        return userInfo
     }
 }
